@@ -1,5 +1,6 @@
 using HackerNews;
 using HackerNews.Core;
+using HackerNews.Core.Model.Front;
 using Microsoft.OpenApi.Models;
 using Polly;
 using Polly.Extensions.Http;
@@ -20,10 +21,8 @@ public class Program
         {
             c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-            c.IncludeXmlComments(xmlPath);
-            c.IncludeXmlComments("/app/bin/Debug/net7.0/HackerNews.Core.xml");
+            c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, typeof(Program).Assembly.Location.Replace(".dll", ".xml")));
+            c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, typeof(StoryResponse).Assembly.Location.Replace(".dll", ".xml")));
         });
 
         builder.Services.AddMemoryCache();
