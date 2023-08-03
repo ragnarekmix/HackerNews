@@ -15,9 +15,11 @@ namespace HackerNews.Api.Controllers
         }
 
         [HttpGet("best")]
-        public async Task<IActionResult> GetBestStories()
+        public async Task<IActionResult> GetBestStories(int n = 10)
         {
-            var result = await _hackerNewsService.GetBestStories();
+            if (n < 1) return BadRequest();
+
+            var result = await _hackerNewsService.GetBestStories(n);
 
             if (result is null || !result.Any())
                 return NoContent();

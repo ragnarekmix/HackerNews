@@ -39,7 +39,7 @@ namespace HackerNews
             _cache.Set(_settings.CacheKey, orderedStories, TimeSpan.FromMinutes(_settings.CacheLifetimeMinutes));
         }
 
-        public async ValueTask<IEnumerable<StoryResponse>> GetBestStories(CancellationToken ct = default)
+        public async ValueTask<IEnumerable<StoryResponse>> GetBestStories(int limit, CancellationToken ct = default)
         {
             try
             {
@@ -50,7 +50,7 @@ namespace HackerNews
                     return _cache.Get<IEnumerable<StoryResponse>>(_settings.CacheKey);
                 }
 
-                return besttories;
+                return besttories.Take(limit); // as we only have 200 best stories coming from api this solution is good enough
             }
             catch (Exception)
             {
